@@ -1,24 +1,30 @@
-from os import access
-from pydoc import describe
 import tweepy
 import requests
 import json
 
-api_key = "your api key"
-api_key_secret = "your secret key"
-access_token ="your access key"
-access_token_secret ="your token secret"
+# Informações de autenticação
+api_key = "sua chave de API"
+api_key_secret = "seu segredo de chave"
+access_token = "seu token de acesso"
+access_token_secret = "seu segredo de token"
 
+# Configuração da autenticação
 authenticator = tweepy.OAuthHandler(api_key, api_key_secret)
 authenticator.set_access_token(access_token, access_token_secret)
 
+# Criação da instância da API
 api = tweepy.API(authenticator, wait_on_rate_limit=True)
 
-data = requests.get('https://zenquotes.io/api/quotes/')
-data = json.loads(data.text)
+# Obtém a citação aleatória
+response = requests.get('https://zenquotes.io/api/quotes/')
+data = json.loads(response.text)
 quote = data[0].get('q')
 author = data[0].get('a')
-description = quote + "\n" + " - " + author
+description = f"{quote}\n - {author}"
+
+# Exibe a citação
 print(description)
-print("Bio Updated")
+print("Bio Atualizada")
+
+# Atualiza o status do perfil
 api.update_profile(description=description)
